@@ -1,0 +1,22 @@
+# This is a sample build configuration for Other.
+# Check our guides at https://confluence.atlassian.com/x/5Q4SMw for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: atlassian/default-image:2
+
+pipelines:
+  # Branches get an image tagged for them with the code from the last commit
+  branches:
+    '{dev,staging,master,pipelines}':
+      - step:
+          script:
+            - apt update && apt -y install python-pip
+            - pip install awscli
+            - export AWS_ACCESS_KEY_ID=${PUSH_KEY_ID}
+            - export AWS_SECRET_ACCESS_KEY=${PUSH_KEY}
+            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
+            - docker build -t ${ECR_REPO}:${BITBUCKET_TAG} .
+            - docker push ${ECR_REPO}:${BITBUCKET_TAG}
+          services:
+            - docker
