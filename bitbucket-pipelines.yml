@@ -3,7 +3,7 @@ image: atlassian/default-image:2
 pipelines:
   # Branches get an image tagged for them with the code from the last commit. Staging tag is for use in staging environments, production tag is for production environments, etc...
   branches:
-    '{dev,staging,master,pipelines}':
+    '{dev,staging,master}':
       - step:
           script:
             - apt update && apt -y install python-pip
