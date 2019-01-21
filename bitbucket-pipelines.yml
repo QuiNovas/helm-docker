@@ -13,3 +13,14 @@ pipelines:
             - docker push ${ECR_REPO}:${BITBUCKET_BRANCH}
           services:
             - docker
+  tags:
+    '*':
+      - step:
+          script:
+            - apt update && apt -y install python-pip
+            - pip install awscli
+            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
+            - docker build -t ${ECR_REPO}:${BITBUCKET_TAG} .
+            - docker push ${ECR_REPO}:${BITBUCKET_TAG}
+          services:
+            - docker
