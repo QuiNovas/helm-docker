@@ -3,8 +3,6 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 
 RUN mkdir /root/.kube
 
-COPY config /root/.kube/config
-
 RUN mkdir -p /root/.helm/plugins && \
     apk add --no-cache bash && \
     export HELM_HOME=/root/.helm && \
@@ -14,8 +12,6 @@ RUN mkdir -p /root/.helm/plugins && \
       build-base \
       curl \
       py-pip && \
-    apk add --no-cache openssl && \
-    go get -u github.com/cloudflare/cfssl/cmd/... && \
     go get -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator && \
     mv /root/go/bin/* /bin/ && \
     pip install --no-cache-dir awscli && \
@@ -35,6 +31,5 @@ RUN mkdir -p /root/.helm/plugins && \
       build-base \
       curl \
       py-pip && \
-    apk add --no-cache python && \
-    apk add --no-cache groff
+    apk add --no-cache python
 CMD ["/bin/bash"]
