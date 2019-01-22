@@ -1,70 +1,14 @@
 image: atlassian/default-image:2
 
 pipelines:
-  # Branches get an image tagged for them with the code from the last commit. Staging tag is for use in staging environments, production tag is for production environments, etc...
-  branches:
-    dev:
-      - step:
-          script:
-            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
-            - \[ -z "${DEV_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
-            - echo "${DEV_KUBE_CONFIG}" | base64 -di >./config
-            - apt update && apt -y install python-pip
-            - pip install awscli
-            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
-            - docker build -t ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH} .
-            - docker push ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH}
-          services:
-            - docker
-    staging:
-      - step:
-          script:
-            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
-            - \[ -z "${STAGING_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
-            - echo "${STAGING_KUBE_CONFIG}" | base64 -di >./config
-            - apt update && apt -y install python-pip
-            - pip install awscli
-            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
-            - docker build -t ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH} .
-            - docker push ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH}
-          services:
-            - docker
-    master:
-      - step:
-          script:
-            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
-            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
-            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
-            - apt update && apt -y install python-pip
-            - pip install awscli
-            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
-            - docker build -t ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH} .
-            - docker push ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH}
-          services:
-            - docker
-    production:
-      - step:
-          script:
-            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
-            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
-            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
-            - apt update && apt -y install python-pip
-            - pip install awscli
-            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
-            - docker build -t ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH} .
-            - docker push ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_BRANCH}
-          services:
-            - docker
   tags:
     '*':
       - step:
           script:
-            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
-            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
-            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
-            - docker build -t ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_TAG} .
-            - docker push ${PIPELINES_CONTAINER_ECR_REPO}:${BITBUCKET_TAG}
+            - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+            - docker build -t ${REPO}:${BITBUCKET_TAG} .
+            - docker push ${REPO}:${BITBUCKET_TAG}
           services:
             - docker
