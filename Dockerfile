@@ -3,7 +3,7 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 
 RUN mkdir /root/.kube
 
-COPY config /root/.kube/config
+COPY docker_entry.sh /docker_entry.sh
 
 RUN mkdir -p /root/.helm/plugins && \
     apk add --no-cache bash && \
@@ -37,4 +37,5 @@ RUN mkdir -p /root/.helm/plugins && \
       py-pip && \
     apk add --no-cache python && \
     apk add --no-cache groff
-CMD ["/bin/bash"]
+
+CMD ["/docker_entry.sh"]
