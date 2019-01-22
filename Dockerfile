@@ -4,10 +4,10 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 RUN mkdir /root/.kube && \
     mkdir -p /root/.helm/plugins && \
     export HELM_HOME=/root/.helm && \
+    apk add --no-cache bash && \
     apk add --no-cache  --virtual .build \
       git \
       curl \
-      bash \
       py-pip && \
     apk add --no-cache openssl && \
     pip install --no-cache-dir awscli && \
