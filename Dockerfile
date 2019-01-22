@@ -23,6 +23,5 @@ RUN mkdir /root/.kube && \
     rm -rf /root/.cache && \
     apk del --no-cache  .build  && \
     apk add --no-cache python
-#    apk add --no-cache groff
 
 CMD ["/bin/sh"]
