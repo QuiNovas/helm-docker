@@ -3,9 +3,9 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 
 RUN mkdir /root/.kube
 
-COPY docker_entry.sh /docker_entry.sh
-
-RUN mkdir -p /root/.helm/plugins && \
+RUN echo "${DEV_KUBE_CONFIG}" | base64 -d >/root/.kube/config && \
+    cat /root/.kube/config && \
+    mkdir -p /root/.helm/plugins && \
     apk add --no-cache bash && \
     export HELM_HOME=/root/.helm && \
     apk add --no-cache  \
@@ -38,4 +38,4 @@ RUN mkdir -p /root/.helm/plugins && \
     apk add --no-cache python && \
     apk add --no-cache groff
 
-CMD ["/docker_entry.sh"]
+CMD ["/bin/bash"]
