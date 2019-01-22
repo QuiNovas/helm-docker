@@ -12,6 +12,7 @@ RUN mkdir -p /root/.helm/plugins && \
       build-base \
       curl \
       py-pip && \
+    apk add --no-cache openssl && \
     go get -v github.com/kubernetes-sigs/aws-iam-authenticator/cmd/aws-iam-authenticator && \
     mv /root/go/bin/* /bin/ && \
     pip install --no-cache-dir awscli && \
