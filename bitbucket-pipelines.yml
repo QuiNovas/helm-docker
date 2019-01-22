@@ -6,6 +6,7 @@ pipelines:
     dev:
       - step:
           script:
+            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
             - \[ -z "${DEV_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${DEV_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
@@ -18,6 +19,7 @@ pipelines:
     staging:
       - step:
           script:
+            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
             - \[ -z "${STAGING_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${STAGING_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
@@ -30,6 +32,7 @@ pipelines:
     master:
       - step:
           script:
+            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
             - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
@@ -42,6 +45,7 @@ pipelines:
     production:
       - step:
           script:
+            - export AWS_ACCESS_KEY_ID=${DOCKER_KEY_ID} AWS_SECRET_ACCESS_KEY=${DOCKER_KEY}
             - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
