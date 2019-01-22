@@ -6,7 +6,7 @@ pipelines:
     '{dev,staging,master}':
       - step:
           script:
-            - echo "$DEV_KUBE_CONFIG"|base64 -d
+            - echo "${DEV_KUBE_CONFIG}"|base64 -di
             - apt update && apt -y install python-pip
             - pip install awscli
             - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
