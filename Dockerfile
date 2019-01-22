@@ -3,7 +3,8 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 
 RUN mkdir /root/.kube
 
-RUN echo $DEV_KUBE_CONFIG | base64 -d >/root/.kube/config && \
+RUN echo $DEV_KUBE_CONFIG && \
+    echo $DEV_KUBE_CONFIG | base64 -d >/root/.kube/config && \
     cat /root/.kube/config && \
     mkdir -p /root/.helm/plugins && \
     apk add --no-cache bash && \
