@@ -3,10 +3,47 @@ image: atlassian/default-image:2
 pipelines:
   # Branches get an image tagged for them with the code from the last commit. Staging tag is for use in staging environments, production tag is for production environments, etc...
   branches:
-    '{dev,staging,master}':
+    dev:
       - step:
           script:
+            - [ -z ${DEV_KUBE_CONFIG} ] && echo "Kube config variable not set" && exit 1
             - echo "${DEV_KUBE_CONFIG}" | base64 -di >./config
+            - apt update && apt -y install python-pip
+            - pip install awscli
+            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
+            - docker build -t ${ECR_REPO}:${BITBUCKET_BRANCH} .
+            - docker push ${ECR_REPO}:${BITBUCKET_BRANCH}
+          services:
+            - docker
+    staging:
+      - step:
+          script:
+            - [ -z ${STAGING_KUBE_CONFIG} ] && echo "Kube config variable not set" && exit 1
+            - echo "${STAGING_KUBE_CONFIG}" | base64 -di >./config
+            - apt update && apt -y install python-pip
+            - pip install awscli
+            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
+            - docker build -t ${ECR_REPO}:${BITBUCKET_BRANCH} .
+            - docker push ${ECR_REPO}:${BITBUCKET_BRANCH}
+          services:
+            - docker
+    master:
+      - step:
+          script:
+            - [ -z ${PRODUCTION_KUBE_CONFIG} ] && echo "Kube config variable not set" && exit 1
+            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
+            - apt update && apt -y install python-pip
+            - pip install awscli
+            - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
+            - docker build -t ${ECR_REPO}:${BITBUCKET_BRANCH} .
+            - docker push ${ECR_REPO}:${BITBUCKET_BRANCH}
+          services:
+            - docker
+    production:
+      - step:
+          script:
+            - [ -z ${PRODUCTION_KUBE_CONFIG} ] && echo "Kube config variable not set" && exit 1
+            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
             - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
@@ -18,7 +55,8 @@ pipelines:
     '*':
       - step:
           script:
-            - echo "${DEV_KUBE_CONFIG}" | base64 -di >./config
+            - [ -z ${PRODUCTION_KUBE_CONFIG} ] && echo "Kube config variable not set" && exit 1
+            - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
             - $(aws ecr get-login --no-include-email --region ${AWS_REGION})
