@@ -1,1 +1,1 @@
-Build the docker image used for angeleye's pipelines
+Docker image containing tillerless helm, aws-iam-authenticator, and tillerless helm.
