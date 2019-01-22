@@ -6,7 +6,7 @@ pipelines:
     dev:
       - step:
           script:
-            - \[ -z ${DEV_KUBE_CONFIG} \] && echo "Kube config variable not set" && exit 1
+            - \[ -z "${DEV_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${DEV_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
@@ -18,7 +18,7 @@ pipelines:
     staging:
       - step:
           script:
-            - \[ -z ${STAGING_KUBE_CONFIG} \] && echo "Kube config variable not set" && exit 1
+            - \[ -z "${STAGING_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${STAGING_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
@@ -30,7 +30,7 @@ pipelines:
     master:
       - step:
           script:
-            - \[ -z ${PRODUCTION_KUBE_CONFIG} \] && echo "Kube config variable not set" && exit 1
+            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
@@ -42,7 +42,7 @@ pipelines:
     production:
       - step:
           script:
-            - \[ -z ${PRODUCTION_KUBE_CONFIG} \] && echo "Kube config variable not set" && exit 1
+            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
@@ -55,7 +55,7 @@ pipelines:
     '*':
       - step:
           script:
-            - \[ -z ${PRODUCTION_KUBE_CONFIG} \] && echo "Kube config variable not set" && exit 1
+            - \[ -z "${PRODUCTION_KUBE_CONFIG}" \] && echo "Kube config variable not set" && exit 1
             - echo "${PRODUCTION_KUBE_CONFIG}" | base64 -di >./config
             - apt update && apt -y install python-pip
             - pip install awscli
