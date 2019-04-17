@@ -4,7 +4,7 @@ LABEL maintainer="Mathew Moon < mmoon@quinovas.com >"
 RUN mkdir /root/.kube && \
     mkdir -p /root/.helm/plugins && \
     export HELM_HOME=/root/.helm && \
-    apk add --no-cache bash && \
+    apk add --no-cache bash nano && \
     apk add --no-cache  --virtual .build \
       git \
       curl \
@@ -20,6 +20,11 @@ RUN mkdir /root/.kube && \
     helm init --client-only && \
     rm -rf /root/.cache && \
     apk del --no-cache  .build  && \
-    apk add --no-cache python
+    apk add --no-cache python && \
+    echo "[ -f ~/.bashrc ] && source ~/.bashrc" >>/etc/profile
 
-CMD ["/bin/sh"]
+COPY tiller.sh /root/.helm/plugins/helm-tiller/scripts/tiller.sh
+COPY bashrc /root/.bashrc
+ENV PS1="\[\e[0;32m\]$(pwd):\h $\[\e[m\] "
+
+CMD ["/bin/bash"]
