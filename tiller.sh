@@ -2,7 +2,12 @@
 
 set -e
 
-export PS1="\[\e[0;32m\]$(pwd):\h $\[\e[m\] "
+if [ ! -z "${PROMPT}" ]; then
+  export PS2="${PROMPT}"
+else
+ export PS1="\[\e[0;32m\]\w:\h $\[\e[m\] "
+fi
+
 : "${HELM_TILLER_SILENT:=false}"
 : "${HELM_TILLER_PORT:=44134}"
 : "${HELM_TILLER_STORAGE:=secret}"
