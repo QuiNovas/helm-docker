@@ -3,7 +3,7 @@
 set -e
 
 if [ ! -z "${PROMPT}" ]; then
-  export PS2="${PROMPT}"
+  export PS1="${PROMPT}"
 else
  export PS1="\[\e[0;32m\]\w:\h $\[\e[m\] "
 fi
