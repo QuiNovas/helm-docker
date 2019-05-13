@@ -20,7 +20,7 @@ RUN mkdir /root/.kube && \
     helm init --client-only && \
     rm -rf /root/.cache && \
     apk del --no-cache  .build  && \
-    apk add --no-cache python && \
+    apk add --no-cache python ca-certificates && \
     echo "[ -f ~/.bashrc ] && source ~/.bashrc" >>/etc/profile
 
 COPY tiller.sh /root/.helm/plugins/helm-tiller/scripts/tiller.sh
